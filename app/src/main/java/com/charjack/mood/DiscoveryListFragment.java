@@ -52,9 +52,6 @@ public class DiscoveryListFragment extends Fragment{
         super.onAttach(context);
         this.mainActivity = (MainActivity) context;
     }
-  //  private ExecutorService mThreadPool;
-
-    public DiscoveryListFragment(){/*mThreadPool= Executors.newSingleThreadExecutor();*/}
 
     @Nullable
     @Override
@@ -69,22 +66,28 @@ public class DiscoveryListFragment extends Fragment{
         //passageInfos = loadDataUtils.getLists();//通过网络来加载数据
         discoveryAdapter = new DiscoveryAdapter(mainActivity,webPassageInfo.getData());
         listView_discovery.setAdapter(discoveryAdapter);
-       // getInfofromNetwork();
-        getBodyData();
+        getInfofromNetwork();
+        // getBodyData();
         return view;
     }
-//    public Handler handler = new Handler(){
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            switch(msg.what){
-//                case 1:
-//                    break;
-//            }
-//        }
-//    };
 
-/*    public void getInfofromNetwork() {
+    public Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch(msg.what){
+                case 1:
+                    discoveryAdapter.notifyDataSetChanged();
+                    break;
+            }
+        }
+    };
+
+    //okhttp
+    private ExecutorService mThreadPool;
+    public DiscoveryListFragment(){mThreadPool= Executors.newSingleThreadExecutor();}
+
+    public void getInfofromNetwork() {
         final String urlhome = UrlConstant.HOME_BODY_BEGIN+ currentpage +UrlConstant.HOME_BODY_END;
         System.out.println(urlhome);
         mThreadPool.execute(new Runnable() {
@@ -95,15 +98,16 @@ public class DiscoveryListFragment extends Fragment{
                 //所以要想办法放到子线程执行
                 try {
                     Response response = client.newCall(request).execute();
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         System.out.println("网络下载成功");
-                        System.out.println(response.body().string());
-                        WebPassageInfo webpassageInfo = JSONObject.parseObject(response.body().string(),WebPassageInfo.class);
-//                        System.out.println(webpassageInfo.toString());
-                        webinfo.getData().addAll(webpassageInfo.getData());
-                        discoveryAdapter.notifyDataSetChanged();
-//                        Message msg = handler.obtainMessage(1,"success");
-//                        msg.sendToTarget();
+//                        System.out.println(response.body().string());
+                        //response.body().string()这个是存在缓存中数据，只能使用一次，如果之前打印使用一次，后面就会出错。
+                        WebPassageInfo webpassageInfo = JSONObject.parseObject(response.body().string(), WebPassageInfo.class);
+//                      System.out.println(webpassageInfo.toString());
+                        webPassageInfo.getData().addAll(webpassageInfo.getData());
+                        //discoveryAdapter.notifyDataSetChanged();
+                        Message msg = handler.obtainMessage(1,"success");
+                        msg.sendToTarget();
                     }
                 } catch (IOException e) {
                     System.out.println("网络下载失败");
@@ -111,10 +115,13 @@ public class DiscoveryListFragment extends Fragment{
                 }
             }
         });
-    }*/
+    }
+
+
+    //httpuitls
     private HttpUtils httpUtils = new HttpUtils();
     private HttpHandler httpHandler;
-    //httpuitls
+
     private void getBodyData() {
 
         final String urlhome = UrlConstant.HOME_BODY_BEGIN+ currentpage +UrlConstant.HOME_BODY_END;
