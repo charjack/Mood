@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ccffffff"
+        android:id="@+id/title_dicovery"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="发  现"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_centerVertical="true"
+            android:padding="15dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/head_icon"
+            android:layout_marginRight="15dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/duomi_link_image"
+            />
+    </RelativeLayout>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:dividerHeight="5dp"
+        android:id="@+id/discovery_list"
+        android:overScrollMode="always"
+>
+    </ListView>
+</LinearLayout>
