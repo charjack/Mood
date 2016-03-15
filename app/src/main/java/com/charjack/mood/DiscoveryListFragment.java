@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.alibaba.fastjson.JSONObject;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.zip.Inflater;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -36,7 +38,7 @@ import okhttp3.Response;
 /**
  * Created by Administrator on 2016/3/13.
  */
-public class DiscoveryListFragment extends Fragment{
+public class DiscoveryListFragment extends Fragment implements AbsListView.OnScrollListener{
 
 
     DiscoveryAdapter discoveryAdapter;
@@ -61,6 +63,11 @@ public class DiscoveryListFragment extends Fragment{
         view = inflater.inflate(R.layout.discovery_list_fragment,null);
 
         listView_discovery = (ListView) view.findViewById(R.id.discovery_list);
+        listView_discovery.setOnScrollListener(this);
+        LayoutInflater ifl = LayoutInflater.from(mainActivity);
+        View footerView = ifl.inflate(R.layout.footviewlayout, null);
+        listView_discovery.addFooterView(footerView);
+
         webPassageInfo = new WebPassageInfo(new ArrayList<PassageInfo>());
         //这里初始化加载第一个page，后面当list下滑到底部后，出发一个操作继续加载
         //passageInfos = loadDataUtils.getLists();//通过网络来加载数据
@@ -147,5 +154,21 @@ public class DiscoveryListFragment extends Fragment{
                 System.out.println("httputil failed");
             }
         });
+    }
+
+    private int visibleLastIndex;//用来可显示的最后一条数据的索引
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+        if (discoveryAdapter.getCount()==visibleLastIndex && scrollState== AbsListView.OnScrollListener.SCROLL_STATE_IDLE){
+
+
+            currentpage++;
+            getBodyData();
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        visibleLastIndex = firstVisibleItem+visibleItemCount-1;
     }
 }
