@@ -5,6 +5,9 @@ package com.charjack.mood;
  */
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 
 import com.charjack.mood.utils.Utils;
 import com.lidroid.xutils.DbUtils;
@@ -14,18 +17,25 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import java.util.prefs.Preferences;
+
 /**
  * Created by Administrator on 15-8-17.
  */
 public class BaseApp extends Application {
     public static DbUtils db;
     public static Context context;
+    public static String list_preference_first;
 
     @Override
     public void onCreate() {
         super.onCreate();
         this.context = getApplicationContext();
         initImageLoadGlobalConfig();
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        SharedPreferences mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        list_preference_first = mySharedPreferences.getString("list_preference", "null");
     }
 
     public static Context getContext() {

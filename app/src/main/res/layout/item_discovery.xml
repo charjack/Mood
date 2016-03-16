@@ -8,11 +8,17 @@
     android:visibility="gone"
     android:scaleType="fitXY"
     android:id="@+id/imageview_search" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ccffffff">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textview_desc"
         android:text="主人，您的网络不好，请检查网络设置。"/>
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

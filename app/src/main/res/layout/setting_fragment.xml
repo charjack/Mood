@@ -4,17 +4,31 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ccffffff"
+        android:background="#0fcccccc"
         android:layout_gravity="top"
         android:id="@+id/title_dicovery"
         >
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
             android:text="设  置"
+            android:gravity="center"
+            android:layout_alignParentTop="true"
+            android:background="#cc00ffff"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_centerVertical="true"
+            android:id="@+id/setting_title"
             android:padding="15dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/setting_title"
+            android:background="#0f555555">
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/prefs_fragment"
+                android:name="com.charjack.mood.PrefFragment"
+                />
+        </LinearLayout>
     </RelativeLayout>
 </LinearLayout>

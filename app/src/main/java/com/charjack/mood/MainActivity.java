@@ -1,19 +1,25 @@
 package com.charjack.mood;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.charjack.mood.adapter.DiscoveryAdapter;
 import com.charjack.mood.utils.FragmentTabUtils;
+import com.charjack.mood.utils.SystemBarTintManager;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,16 +28,51 @@ import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
 
+/*
+* 2016.3.16 结束
+* 不足 处：
+* 1、不应该用三个fragment来做切换的，而是直接用三个activity来进行
+* 2、没有加入pulltorefresh，因为之前用了list来做上下拉的动作
+* 3、没有加入toolbar进行标题栏的操作，导致后面的状态栏调节有点问题。
+* 4、图片的加载还不是很流畅。
+* 5、还没有加入完成sharesdk的sso认证
+* 6、没有完成多米音乐的链接下载功能，这应该是一个webview的功能
+*/
+
+/*
+*做开发时。1：定要先定义好布局，
+*       2、确定并熟悉所用的所有第三方库，以免出现架构的错误，就想pulltorefresh这样的错误，不能犯。（这里只是把库集成进来了，暂时不进行修改了）
+*       3、确认架构正确再进行开发
+*/
+
 public class MainActivity extends AppCompatActivity implements FragmentTabUtils.OnRgsExtraCheckedChangedListener,DiscoveryAdapter.OnDicoveryAdapterListener{
 
     private RadioGroup rgs;
     private RadioButton radio_discovery,radio_fav,radio_setting;
     private List<Fragment> fragments = new ArrayList<>();
     private long exitTime = 0;
+    SlidingMenu menu;
+    public SystemBarTintManager tintManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView(R.layout.activity_main);
+
+        //创建侧滑菜单
+        //加入这个slidingmenu后，状态栏悬浮在slidingmenu这个布局上了，
+        menu  = new SlidingMenu(this);
+        menu.setMode(SlidingMenu.LEFT);
+        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        menu.setFadeDegree(0.55f);
+        menu.setMenu(R.layout.sliding_menu_layout);
+        menu.setBackgroundColor(Color.WHITE);
+        menu.setBehindScrollScale(0.0f);
+        menu.setBehindOffsetRes(R.dimen.menu_offset);//设置相对屏幕的偏移量
+        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+
         rgs = (RadioGroup) findViewById(R.id.radio_group);
         radio_discovery = (RadioButton) findViewById(R.id.radio_discovery);
         radio_fav = (RadioButton) findViewById(R.id.radio_fav);
@@ -42,7 +83,24 @@ public class MainActivity extends AppCompatActivity implements FragmentTabUtils.
         fragments.add(new SettingFragment());
         FragmentTabUtils utils = new FragmentTabUtils(getSupportFragmentManager(), fragments, R.id.fragment_main_container, rgs);
         utils.setOnRgsExtraCheckedChangedListener(this);
+
+        tintManager = new SystemBarTintManager(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (findViewById(R.id.rootView) != null) {
+                findViewById(R.id.rootView).post(new Runnable() {   //让布局绘制完成了再设置
+                    @Override
+                    public void run() {
+                        tintManager.setStatusBarTintEnabled(true);
+                            tintManager.setStatusBarTintResource(R.color.myGreen);
+                        SystemBarTintManager.SystemBarConfig config = tintManager.getConfig();
+                       // findViewById(R.id.rootView).setPadding(0, config.getPixelInsetTop(false), 0, config.getPixelInsetBottom());
+                    }
+                });
+            }
+        }
+
     }
+
 
     @Override
     public void onBackPressed() {

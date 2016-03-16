@@ -2,12 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical">
+    <!--xmlns:ptr="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ccffffff"
+        android:background="#cc00ffff"
         android:id="@+id/title_dicovery"
         >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:src="@mipmap/slidingmenu"
+            android:layout_marginTop="5dp"
+            android:id="@+id/sliding_image"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

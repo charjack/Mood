@@ -1,6 +1,8 @@
 package com.charjack.mood;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,13 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.charjack.mood.Constant.UrlConstant;
 import com.charjack.mood.adapter.DiscoveryAdapter;
 import com.charjack.mood.vo.PassageInfo;
 import com.charjack.mood.vo.WebPassageInfo;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.lidroid.xutils.HttpUtils;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.HttpHandler;
@@ -35,10 +40,16 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+/*
+*做开发时。1：定要先定义好布局，
+*       2、确定并熟悉所用的所有第三方库，以免出现架构的错误，就想pulltorefresh这样的错误，不能犯。（这里只是把库集成进来了，暂时不进行修改了）
+*       3、开发
+* /
+ */
 /**
  * Created by Administrator on 2016/3/13.
  */
-public class DiscoveryListFragment extends Fragment implements AbsListView.OnScrollListener{
+public class DiscoveryListFragment extends Fragment implements AbsListView.OnScrollListener,View.OnClickListener{
 
 
     DiscoveryAdapter discoveryAdapter;
@@ -48,7 +59,7 @@ public class DiscoveryListFragment extends Fragment implements AbsListView.OnScr
     private WebPassageInfo webPassageInfo;
     public int currentpage=1;
     private final OkHttpClient client = new OkHttpClient();
-
+    private ImageView sliding_image,duomi_link_image;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -63,6 +74,11 @@ public class DiscoveryListFragment extends Fragment implements AbsListView.OnScr
         view = inflater.inflate(R.layout.discovery_list_fragment,null);
 
         listView_discovery = (ListView) view.findViewById(R.id.discovery_list);
+        sliding_image = (ImageView) view.findViewById(R.id.sliding_image);
+        sliding_image.setOnClickListener(this);
+        duomi_link_image = (ImageView) view.findViewById(R.id.duomi_link_image);
+        duomi_link_image.setOnClickListener(this);
+
         listView_discovery.setOnScrollListener(this);
         LayoutInflater ifl = LayoutInflater.from(mainActivity);
         View footerView = ifl.inflate(R.layout.footviewlayout, null);
@@ -170,5 +186,19 @@ public class DiscoveryListFragment extends Fragment implements AbsListView.OnScr
     @Override
     public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         visibleLastIndex = firstVisibleItem+visibleItemCount-1;
+    }
+
+    @Override
+    public void onClick(View view) {
+       switch (view.getId()){
+            case R.id.sliding_image:
+                Toast.makeText(mainActivity,"slidingmenu",Toast.LENGTH_SHORT).show();
+                mainActivity.menu.showMenu(true);
+                break;
+
+           case R.id.duomi_link_image:
+               break;
+
+        }
     }
 }

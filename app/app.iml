@@ -113,5 +113,7 @@
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Moments-2.7.0" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Core-2.7.0" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-ShortMessage-2.7.0" level="project" />
+    <orderEntry type="module" module-name="library_sm" exported="" />
+    <orderEntry type="module" module-name="library" exported="" />
   </component>
 </module>

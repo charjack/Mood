@@ -4,4 +4,10 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_splash">SplashActivity</string>
+    <string-array name="city">
+        <item>bei</item>
+        <item>shang</item>
+        <item>guang</item>
+        <item>shen</item>
+    </string-array>
 </resources>
